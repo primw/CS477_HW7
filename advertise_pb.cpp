@@ -1,11 +1,14 @@
 #include<bits/stdc++.h>
+#include <fstream>
+#include <iostream>
 using namespace std;
 
-int maxTotalReven(int d, int x[], int revenue[], int n)
-{
 
-    int maxTotRev[d+1]; 
-    memset(maxTotRev, 0, sizeof(maxTotRev));
+//Bottomu-Up Approach
+int maxTotalReven(int d, int x[], int revenue[], int n, int maxTotRev[])
+{
+    ofstream file;
+    file.open("advertise_pb_out.txt");
     int next_ad = 0; 
     for (int i = 1; i <= d; i++)
     {
@@ -14,29 +17,27 @@ int maxTotalReven(int d, int x[], int revenue[], int n)
             if (x[next_ad] != i)
             {
                 maxTotRev[i] = maxTotRev[i-1];
-                cout << maxTotRev[i] << endl;
             }
             else
             {
                 if (i <= 5)
                 {
                     maxTotRev[i] = max(maxTotRev[i-1], revenue[next_ad]);
-                    cout << maxTotRev[i] << endl;
                 }
                 else
                 {
                     maxTotRev[i] = max(maxTotRev[i-4]+revenue[next_ad],maxTotRev[i-1]);
                     next_ad++;
-                    cout << maxTotRev[i] << endl;
                 }
             }
         }
         else
         {
             maxTotRev[i] = maxTotRev[i - 1];
-            cout << maxTotRev[i] << endl;
         }
+        file << maxTotRev[i] << " ";
     }
+    file << endl;
     return maxTotRev[d];
 }
 
@@ -46,6 +47,8 @@ int main()
     int x[] = {6, 7, 12, 14};
     int revenue[] = {5, 6, 5, 1};
     int n = 4;
-    maxTotalReven(d, x, revenue, n);
+    int maxTotRev[n+1]; 
+    memset(maxTotRev, 0, sizeof(maxTotRev));
+    maxTotalReven(d, x, revenue, n, maxTotRev);
     return 0;
 }
